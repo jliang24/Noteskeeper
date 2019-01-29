@@ -1,22 +1,22 @@
 const requireLogin = require('../middlewares/requireLogin'); 
 const mongoose = require('mongoose'); 
 const Boards = mongoose.model('Boards'); 
-const Card = mongoose.model('Cards')
+const Card = mongoose.model('Cards'); 
 
 module.exports = (app) => {
   app.post('/api/cards', requireLogin, async (req, res) => { 
-    console.log(req.body)
     const { title, type, name, field, boardId } = req.body; 
     const Board = await Boards.findById(boardId); 
-    const card = new Card({
-      title,
-      item: {name, type, [type]:field}, 
-      _board: Board
-    }); 
+    const listNames = Object.keys(field);
+    const listValues = Object.values(field); 
+    const card = type === 'text' ? 
+    new Card({ title, item: {name, type, [type]:field}, _board: Board}): 
+    new Card({ title, item: {type, [type]:field, list: {items: listValues,itemNames: listNames }}, _board: Board}); 
 
     try {
       await card.save(); 
       res.send(card)
+      console.log(card)
     } catch (err) {
       res.status(401).send(err)
     }
@@ -38,8 +38,21 @@ module.exports = (app) => {
       },
       {
         $set: { 'item.$.text': req.body.value}
-      }
+      },
+      {new: true}
     ).exec(); 
+    console.log(card); 
+    if (!card){
+      const item = {
+        name: req.body.name, 
+        text: req.body.value,
+        type: req.body.type
+      }
+      const card = await Card.findById(req.body.cardId); 
+      await card.item.push(item)
+      await card.save(); 
+      return res.send(card); 
+    }
     res.send(card); 
   }); 
 }

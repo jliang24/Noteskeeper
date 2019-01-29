@@ -24,4 +24,9 @@ module.exports = (app) => {
     const board = await Boards.findById({_id: req.params.id }); 
     res.send(board); 
   })
+
+  app.get('/api/boards/', requireLogin, async (req, res) => {
+    const boards = await Boards.find({_user: req.user.id}); 
+    res.send(boards); 
+  })
 }
