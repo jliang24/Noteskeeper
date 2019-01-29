@@ -1,0 +1,49 @@
+.fa-pulse {
+  position: absolute;
+  width: 100%; 
+  height: 80%; 
+  border: none; 
+  box-shadow: 0 0 0 0 rgba(232, 76, 23,24); 
+  border-radius: 100%; 
+  background-color: #f7f7f7;
+  -webkit-animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+  -moz-animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+  -ms-animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+  background-color: transparent; 
+  right: 0px;
+  top: 5px;  
+}
+
+.fa-large {
+  position: absolute; 
+  font-size: 60px; 
+  color: red; 
+}
+
+.fa-pulse:hover 
+{
+  -webkit-animation: none;-moz-animation: none;-ms-animation: none;animation: none;
+  cursor: pointer
+}
+
+.fa-pulse:focus, .fa-pulse:active{
+  outline-style:none;
+  box-shadow: none;
+}
+
+.pulse-container { 
+  position: fixed; 
+  bottom: 150px; 
+  right: 250px; 
+  width: 200px; 
+}
+
+.boardcard:hover {
+  background-color:rgb(238, 238, 238) !important; 
+}; 
+
+@-webkit-keyframes pulse {to {box-shadow: 0 0 0 30px rgba(232, 76, 61, 0);}}
+@-moz-keyframes pulse {to {box-shadow: 0 0 0 30px rgba(232, 76, 61, 0);}}
+@-ms-keyframes pulse {to {box-shadow: 0 0 0 30px rgba(232, 76, 61, 0);}}
+@keyframes pulse {to {box-shadow: 0 0 0 30px rgba(232, 76, 61, 0);}}
