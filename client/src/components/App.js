@@ -4,12 +4,8 @@ import Header from './Header';
 import Dashboard from './Dashboard'; 
 import BoardForm from './BoardForm'; 
 import history from '../history'; 
-import BoardDetails from './Board/BoardDetails'; 
-
-const Landing = () => {
-  return <div>Landing</div>
-}
-
+import BoardDetails from './Board/BoardDetails';
+import Landing from './Landing';  
 
 class App extends Component {
   render(){
