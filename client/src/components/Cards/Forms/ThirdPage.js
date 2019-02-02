@@ -27,10 +27,10 @@ class ThirdPage extends Component {
     const location = window.location.href.split('/');
     const boardId = location[location.length-1];
     const type = this.state.showText ? 'text' : 'list';   
+
     if (type === 'text'){ 
       this.props.createCard(values.title, formName, values[formName], type, boardId); 
     } else if (type ==='list'){
-      delete values['title']; 
       this.props.createCard(values.title, formName, values, type, boardId); 
     }
     this.props.onSubmit(); 

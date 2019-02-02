@@ -7,6 +7,7 @@ module.exports = (app) => {
   app.post('/api/cards', requireLogin, async (req, res) => { 
     const { title, type, name, field, boardId } = req.body; 
     const Board = await Boards.findById(boardId); 
+    delete field["title"]
     const listNames = Object.keys(field);
     const listValues = Object.values(field); 
     const card = type === 'text' ? 
@@ -28,7 +29,28 @@ module.exports = (app) => {
   }); 
 
   app.patch('/api/cards/:cardId', requireLogin, async (req, res) => {
-    console.log(req.body); 
+    if (req.body.type === 'list'){
+      const card = await Card.findById(req.body.cardId); 
+      const item = await card.item.id(req.body.itemId); 
+      let itemSet = false; 
+
+      item.list.itemNames.forEach( (name, index) => {
+        if (name === req.body.name){
+          item.list.items.set(index,req.body.value)
+          itemSet = true
+        }
+      })
+
+      if (!itemSet){
+        item.list.itemNames.push(req.body.name)
+        item.list.items.push(req.body.value)
+      }
+      
+      await item.save({suppressWarning: true})
+      await card.save(); 
+      return res.send(card)
+    }
+
     const card = await Card.findOneAndUpdate(
       {
         _id: req.body.cardId, 
@@ -41,8 +63,9 @@ module.exports = (app) => {
       },
       {new: true}
     ).exec(); 
-    console.log(card); 
-    if (!card){
+    res.send(card); 
+
+    if (!card && req.body.type==='text'){
       const item = {
         name: req.body.name, 
         text: req.body.value,
@@ -53,6 +76,5 @@ module.exports = (app) => {
       await card.save(); 
       return res.send(card); 
     }
-    res.send(card); 
   }); 
 }

@@ -44,8 +44,8 @@ export const clearBoard = () => async dispatch => {
   dispatch({type: CLEAR_CARDS}); 
 }
 
-export const updateCard = (cardId, name, value, type) => async dispatch => { 
-  const response = await axios.patch(`/api/cards/${cardId}`, {cardId, name, value, type}); 
+export const updateCard = (cardId, name, value, type, itemId="") => async dispatch => { 
+  const response = await axios.patch(`/api/cards/${cardId}`, {cardId, name, value, type, itemId}); 
   
   dispatch({type: UPDATE_CARD, payload:response.data }); 
 }

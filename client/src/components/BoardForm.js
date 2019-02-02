@@ -7,7 +7,7 @@ import { reduxForm, Field } from 'redux-form';
 const formComponent = ({input, meta: {error, touched}}) => {
   return (
     <div>
-      <input autocomplete="off" className="form-control" {...input} />
+      <input autoComplete="off" className="form-control" {...input} />
       <div className="text-danger">
         {touched && error} 
       </div>

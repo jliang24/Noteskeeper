@@ -24,8 +24,8 @@ class FinalPage extends Component {
     if (!this.props.items) return 
     this.props.items.forEach(({type, name, text, list}) => {
       if (type==='list'){
-        list.forEach(( name, index) => {
-            this.items[name] = list[index]
+        list.itemNames.forEach(( name, index) => {
+            this.items[name] = list.items[index]
         })} else if (type === 'text') {
           return this.items[name]=text; 
       }
@@ -58,20 +58,22 @@ class FinalPage extends Component {
   }
 
   renderFields = () => {
-    if (!this.props.items) return <div></div>
     return this.props.items.map( (item) => {
-          return (
-            <React.Fragment>
-              <FieldArea 
-                type = {item.type}
-                form={item.name}
-                key={item.name}
-                card = {this.props.form}
-                onChange = {(form, field, value) => this.props.dispatch(change(form, field, value))}
-                onSave = {this.props.initialize}
-              />
-            </React.Fragment>
-        )}
+      return (
+        <React.Fragment key={item.name ? item.name : item.list.itemNames[0]}>
+          <FieldArea 
+            type = {item.type}
+            form={item.name}
+            key={item.name}
+            item = {item.list}
+            card = {this.props.form}
+            onChange = {(form, field, value) => this.props.dispatch(change(form, field, value))}
+            onSave = {this.props.initialize}
+            itemId = {item._id}
+          />
+        </React.Fragment>
+    )
+      }
     )
   }
 

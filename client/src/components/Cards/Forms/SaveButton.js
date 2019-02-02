@@ -4,7 +4,7 @@ const saveButton = ({showText, showList, onDismiss, onSave=null}) => {
   const renderSaveButton = () => {
     if (onSave){
       return (
-        <button type="button" onClick={onSave} className="btn btn-success float-right btn-sm mb-0">Save</button>
+        <button type="button" onClick={onSave} className="btn btn-success float-right btn-sm mb-1">Save</button>
       )
     }
     return (
@@ -17,7 +17,7 @@ const saveButton = ({showText, showList, onDismiss, onSave=null}) => {
         {renderSaveButton()}
         <button 
           onClick={()=> onDismiss()} 
-          className="btn btn-danger float-left btn-sm mb-0" type="button"> 
+          className="btn btn-danger float-left btn-sm mb-1" type="button"> 
           Cancel
         </button>
       </React.Fragment>
