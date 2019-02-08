@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Modal from './Modal'; 
-import history from '../history'; 
+import Modal from '../Modal'; 
+import history from '../../history'; 
 import axios from 'axios'; 
 import { reduxForm, Field } from 'redux-form'; 
 
@@ -32,7 +32,8 @@ class BoardForm extends Component {
     const response = await axios.post('/api/boards', {
       title:board
     }); 
-    history.push(`boards/${response.data}`)
+
+    history.push(`boards/${response.data}`); 
   }
 
   onDismiss = () => {
@@ -53,9 +54,11 @@ class BoardForm extends Component {
 
 const validate = (values) => {
   const errors = {}; 
+
   if (!values['board']){
     errors.board = 'You must provide a title!'
   }
+  
   return errors; 
 }
 

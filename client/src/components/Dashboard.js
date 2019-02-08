@@ -13,11 +13,16 @@ class Dashboard extends Component {
     if (!this.props.board) return <div></div>
     return this.props.board.map(({title,_id}) => {
       return (
-        <Link to={`home/boards/${_id}`} className="card pt-0 pl-0 pb-4 boardcard" style={{textDecoration: 'none', height:'140px'}}>
-          <div className="card-body">
-            <h3>{title}</h3>
+        <div key={_id} > 
+          <Link to={`home/boards/${_id}`} className="card pt-0 pl-0 pb-4 boardcard" style={{position:'relative', textDecoration: 'none', height:'140px'}}>
+            <div className="card-body">
+              <h3>{title}</h3>
+            </div>
+          </Link>
+          <div style={{position: 'relative', zIndex:5, left:0, top:-150, right:0}}>
+            <Link to={`/home/boards/delete/${_id}`} style={{ position:'absolute',top:'-1px', right:'3px'}} className="close">&#10799;</Link>
           </div>
-        </Link>
+        </div>
         )
     })
   }

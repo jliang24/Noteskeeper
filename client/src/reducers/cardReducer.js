@@ -3,7 +3,9 @@ import {
   CREATE_CARD, 
   CLEAR_CARDS,
   UPDATE_CARD,
-  ADD_FIELD
+  ADD_FIELD,
+  ADD_ITEM,
+  DELETE_CARD
 } from '../actions/types'; 
 import _ from 'lodash'; 
 
@@ -17,8 +19,12 @@ export default (state={}, action) => {
       return {}; 
     case UPDATE_CARD: 
       return {...state, [action.payload._id]: action.payload}; 
+    case DELETE_CARD: 
+      return _.omit(state, action.payload)
     case ADD_FIELD: 
       return {...state, [action.payload._id]: action.payload}; 
+    case ADD_ITEM:
+      return {}
     default: 
       return state; 
   }

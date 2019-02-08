@@ -27,8 +27,8 @@ class BoardDetails extends Component {
     return (
       <React.Fragment>
         <div className="animated fadeInUp"> 
-          <div className="jumbotron jumbotron-fluid p-3 bg-dark text-white mt-1">
-            <h4 className="mb-0">{this.props.board.title}</h4>
+          <div className="jumbotron jumbotron-fluid p-3 bg-dark text-white mt-1 mb-3">
+            <h2 className="mb-0">{this.props.board.title}</h2>
           </div>
           <CardList boardId={this.props.match.params.boardId} />
         </div>

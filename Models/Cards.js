@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose; 
 
 const listSchema = new Schema({
-  checked: [Boolean],
+  checkedNames: [String],
+  checked: [Boolean], 
   items: [String],
   itemNames: [String]
 }); 

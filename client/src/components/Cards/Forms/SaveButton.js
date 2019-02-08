@@ -1,6 +1,6 @@
 import React from 'react'; 
 
-const saveButton = ({showText, showList, onDismiss, onSave=null}) => {
+const saveButton = ({showText, showList, onDismiss, onSave=null, creation}) => {
   const renderSaveButton = () => {
     if (onSave){
       return (
@@ -13,14 +13,15 @@ const saveButton = ({showText, showList, onDismiss, onSave=null}) => {
   }
   if (showText || showList) {
     return(
-      <React.Fragment>
+      <div style={{height: '35px'}}>
         {renderSaveButton()}
+        {creation ||
         <button 
           onClick={()=> onDismiss()} 
           className="btn btn-danger float-left btn-sm mb-1" type="button"> 
           Cancel
-        </button>
-      </React.Fragment>
+        </button>}
+      </div>
     )
   }
   return null 

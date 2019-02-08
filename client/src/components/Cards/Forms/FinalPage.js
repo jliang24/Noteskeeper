@@ -1,9 +1,8 @@
 import React, { Component } from 'react'; 
 import { connect } from 'react-redux'; 
-import {reduxForm, change, reset} from 'redux-form'; 
+import { reduxForm, change } from 'redux-form'; 
 import AddItem from './AddItem'; 
 import FieldArea from './FieldArea'; 
-import _ from 'lodash'; 
 import { addField } from '../../../actions'; 
 import uniqueId from 'uniqid'; 
 
@@ -26,6 +25,7 @@ class FinalPage extends Component {
       if (type==='list'){
         list.itemNames.forEach(( name, index) => {
             this.items[name] = list.items[index]
+            this.items[list.checkedNames[index]] = list.checked[index]
         })} else if (type === 'text') {
           return this.items[name]=text; 
       }
@@ -50,7 +50,19 @@ class FinalPage extends Component {
   }; 
 
   onListClicked = () => {
-    this.setState({showList:true, showText:false})
+    this.setState({showList:true, showText:false}); 
+    const newItem = this.props.card.item.concat({
+      _id: this.props.form,
+      type: "list",
+      list: {
+        itemNames: [uniqueId('listarea-')],
+        items: [],
+        checked: [false],
+        checkedNames: [uniqueId('checkarea-')]
+      }
+    })
+    const copy = {...this.props.card, item: newItem}; 
+    this.props.addField(copy); 
   }; 
 
   onDismiss = () => {
@@ -59,12 +71,13 @@ class FinalPage extends Component {
 
   renderFields = () => {
     return this.props.items.map( (item) => {
+      const name = item.name ? item.name : item.list.itemNames[0] //check for regressions here 
       return (
-        <React.Fragment key={item.name ? item.name : item.list.itemNames[0]}>
+        <React.Fragment key={name}>
           <FieldArea 
             type = {item.type}
-            form={item.name}
-            key={item.name}
+            form={name}
+            key={name}
             item = {item.list}
             card = {this.props.form}
             onChange = {(form, field, value) => this.props.dispatch(change(form, field, value))}

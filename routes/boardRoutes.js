@@ -29,4 +29,9 @@ module.exports = (app) => {
     const boards = await Boards.find({_user: req.user.id}); 
     res.send(boards); 
   })
+
+  app.delete('/api/boards/:id', requireLogin, async (req,res) => {
+    await Boards.find({_id: req.params.id}).deleteOne().exec(); 
+    res.send('/'); 
+  })
 }

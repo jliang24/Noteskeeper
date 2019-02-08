@@ -5,13 +5,13 @@ const addItem = (props) => {
     return (
       <button 
         onClick={() => props.onAddItemClicked()}
-        className="btn btn-outline-dark w-100 m-0 mt-1"> Add an item</button>
+        className="btn btn-outline-dark w-100 m-0 mt-2"> Add an item</button>
     )
 
   return (
       <form className="form-inline">
         <div className="container">
-          <div className="row">
+          <div className="row mt-2">
             <button 
               onClick={() => props.onTextClicked()}
               className="col btn btn-outline-success btn-sm" type="button">Text</button>

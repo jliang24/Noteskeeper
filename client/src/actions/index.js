@@ -1,12 +1,15 @@
 import { 
   FETCH_USER, 
   FETCH_BOARD,
+  DELETE_BOARD,
   FETCH_CARDS,
   CREATE_CARD,
   CLEAR_CARDS,
   UPDATE_CARD,
+  DELETE_CARD,
   ADD_FIELD,
-  FETCH_BOARDS
+  FETCH_BOARDS,
+  ADD_ITEM
 } from './types'; 
 import axios from 'axios'; 
 
@@ -28,6 +31,12 @@ export const fetchBoards = () => async dispatch => {
   dispatch({ type:FETCH_BOARDS, payload: response.data})
 }
 
+export const deleteBoard = id => async dispatch => {
+  await axios.delete(`/api/boards/${id}`); 
+
+  dispatch({ type: DELETE_BOARD, payload: id }); 
+}
+
 export const fetchCards = (boardId) => async dispatch => {
   const response = await axios.get(`/api/boards/${boardId}/cards`); 
 
@@ -46,12 +55,24 @@ export const clearBoard = () => async dispatch => {
 
 export const updateCard = (cardId, name, value, type, itemId="") => async dispatch => { 
   const response = await axios.patch(`/api/cards/${cardId}`, {cardId, name, value, type, itemId}); 
-  
   dispatch({type: UPDATE_CARD, payload:response.data }); 
+}
+
+export const deleteCard = id => async dispatch => {
+  await axios.delete(`/api/cards/${id}`); 
+
+  dispatch({ type: DELETE_CARD, payload: id }); 
 }
 
 export const addField = (values) => async dispatch => {
   dispatch({
     type: ADD_FIELD, payload: values
   })
+}
+
+export const addItem = (id) => {
+  return {
+    type: ADD_ITEM,
+    payload: id
+  }
 }

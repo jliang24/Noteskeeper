@@ -7,7 +7,7 @@ class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-dark bg-primary">
-        <Link className="navbar-brand" to={this.props.auth ? "/home" : "/" }>Noteskeeper</Link>
+        <Link style={{fontSize:'20px'}} className="navbar-brand h1 align-middle " to={this.props.auth ? "/home" : "/" }>Noteskeeper</Link>
         <Auth />
       </nav>
     )

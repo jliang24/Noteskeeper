@@ -6,3 +6,6 @@ export const CREATE_CARD = "create_card";
 export const CLEAR_CARDS = "clear_cards"; 
 export const UPDATE_CARD = "update_card";
 export const ADD_FIELD = "add_field"; 
+export const ADD_ITEM = "add_item"; 
+export const DELETE_BOARD = "delete_board";
+export const DELETE_CARD = "delete_card";  
