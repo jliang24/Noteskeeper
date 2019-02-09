@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import AddItem from './AddItem'; 
 import FieldArea from './FieldArea'; 
 import SaveButton from './SaveButton'; 
-import {createCard} from '../../../actions/'; 
+import {createCard, fetchBoard} from '../../../actions/'; 
 
 
 class ThirdPage extends Component {
-  state = {itemClicked:false, showText: false, showList: false, failed: false}; 
+  state = {itemClicked:false, showText: false, showList: false, failed: false, loading:false}; 
 
   onAddItemClicked = () => {
     this.setState({itemClicked:true, showText: true}); 
@@ -23,7 +23,6 @@ class ThirdPage extends Component {
   }; 
 
   onSave = async values => { 
-    
     const {registeredFields} = this.props.fields
     const newValue = {}; 
     for (let field in registeredFields){
@@ -34,18 +33,20 @@ class ThirdPage extends Component {
       }
     }
 
-    const formName = Object.keys(values).filter(value => value.includes('area'))[0]; 
+    let formName = Object.keys(values).filter(value => value.includes('area'))[0]; 
     if (!formName) return this.setState({ failed: true }); 
     const location = window.location.href.split('/');
     const boardId = location[location.length-1];
     const type = this.state.showText ? 'text' : 'list';   
-
+    this.setState({ loading: true })
     if (type === 'text'){ 
-      this.props.createCard(values.title, formName, values[formName], type, boardId); 
+      formName = Object.keys(values).filter(value => value.includes('textarea'))[0]
+      await this.props.createCard(values.title, formName, values[formName], type, boardId); 
     } else if (type ==='list'){
-      this.props.createCard(values.title, formName, newValue, type, boardId); 
+      await this.props.createCard(values.title, formName, newValue, type, boardId); 
     }
     this.props.onSubmit(); 
+    await this.props.fetchBoard(boardId); 
   }
 
   onDismiss = () => {
@@ -57,7 +58,7 @@ class ThirdPage extends Component {
       <div className="card border-dark mb-3 pl-3 pr-3 pt-4 pb-0 w-100" style={{ maxWidth: '18rem'}}>
         <button onClick={() => this.props.onDismiss()} style={{position:'absolute',top:'-1px', right:'3px'}} className="close">&times;</button>
         <div className="animated slideInRight" > 
-          <h3 align="center"> {this.props.title} </h3>
+          <h2 align="center"> {this.props.title} </h2>
           <AddItem 
             itemClicked={this.state.itemClicked} 
             onAddItemClicked={this.onAddItemClicked}
@@ -79,6 +80,14 @@ class ThirdPage extends Component {
               onDismiss= {this.onDismiss}
               creation 
               />
+            { this.state.loading && 
+              <>
+                <button style={{position: 'absolute', bottom:'4px'}} className="btn btn-info btn-sm" type="button" disabled>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Creating...
+                </button>
+              </>
+            }
           </form>
         </div>
       </div>
@@ -93,11 +102,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-ThirdPage = connect(mapStateToProps, { createCard })(ThirdPage); 
+ThirdPage = connect(mapStateToProps, { createCard, fetchBoard })(ThirdPage); 
  
 
 export default reduxForm({
   form: 'card', 
-  destroyOnUnmount: false,
   enableReinitialize: true 
 })(ThirdPage)

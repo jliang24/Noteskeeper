@@ -23,9 +23,11 @@ module.exports = (app) => {
     const card = type === 'text' ? 
     new Card({ title, item: {name, type, [type]:field}, _board: Board}): 
     new Card({ title, item: {type, [type]:field, list: {items: listValues,itemNames: listNames, checkedNames, checked }}, _board: Board}); 
+    Board.cardOrder.push(card._id); 
 
     try {
       await card.save(); 
+      await Board.save(); 
       res.send(card)
     } catch (err) {
       res.status(401).send(err)
@@ -121,7 +123,14 @@ module.exports = (app) => {
     res.send(card); 
   }); 
 
-  app.delete('/api/cards/:id', requireLogin, async (req,res) => {
+  app.delete('/api/boards/:boardId/cards/:id', requireLogin, async (req,res) => {
+    const update = await Boards.findByIdAndUpdate(
+      {_id: req.params.boardId} ,
+      {
+        $pull: { cardOrder: req.params.id}
+      }
+    )
+
     await Card.find({_id: req.params.id}).deleteOne().exec(); 
     res.send('/'); 
   })

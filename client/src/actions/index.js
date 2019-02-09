@@ -58,10 +58,10 @@ export const updateCard = (cardId, name, value, type, itemId="") => async dispat
   dispatch({type: UPDATE_CARD, payload:response.data }); 
 }
 
-export const deleteCard = id => async dispatch => {
-  await axios.delete(`/api/cards/${id}`); 
+export const deleteCard = (id, boardId) => async dispatch => {
+  await axios.delete(`/api/boards/${boardId}/cards/${id}`); 
 
-  dispatch({ type: DELETE_CARD, payload: id }); 
+  dispatch({ type: DELETE_CARD, payload: {id, boardId} }); 
 }
 
 export const addField = (values) => async dispatch => {

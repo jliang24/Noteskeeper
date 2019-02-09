@@ -4,9 +4,10 @@ import SaveButton from './SaveButton';
 import { connect } from 'react-redux'; 
 import { updateCard } from '../../../actions'; 
 import uniqueId from 'uniqid'; 
+import TextareaAutosize from 'react-autosize-textarea'; 
 
 class fieldArea extends Component {
-  state = {listItems: [uniqueId('listarea-')], checkedItems:[uniqueId('checkarea-')]}; 
+  state = {listItems: [uniqueId('listarea-')], checkedItems:[uniqueId('checkarea-')], loading:false}; 
 
   componentDidMount(){
     if (this.props.item){
@@ -20,21 +21,27 @@ class fieldArea extends Component {
   }
 
   FieldComponent = ({input}) => {
-    return <textarea {...input} className='form-control mt-2 mb-1 z-depth-1-half' rows="4"></textarea>
+    return <TextareaAutosize {...input} className='form-control mt-2 mb-1 z-depth-1-half' rows={4} ></TextareaAutosize>
   }
 
   ListComponent = ({input, meta}) => {
-    return <input {...input} onBlur={ () => this.onListChange(input, meta, 'list') } type="text" style={{borderWidth:'0 0 1.2px 0'}} className="form-control pl-1"/>
+    return <TextareaAutosize {...input} onBlur={ () => this.onListChange(input, meta, 'list') } type="text" style={{borderWidth:'0 0 1.2px 0'}} className="form-control pl-1"/>
   }
 
   CheckComponent = ({input, meta}) => {
-    return <input {...input} onClick={ () => setTimeout(() => this.onListChange(input, meta, 'checkbox'),1500)} className="cr-icon" style={{width:'18px', height:'18px'}} type="checkbox"/>
+    return <input {...input} onClick={ () => this.timedOut(input, meta) } className="cr-icon" style={{width:'18px', height:'18px'}} type="checkbox"/>
   }
 
+  timedOut= (input, meta) => {
+    if (this.props.name==="creation") return 
+    this.setState({ loading: true})
+    setTimeout(() => this.onListChange(input, meta, 'checkbox'),1500)
+  }
   onListChange = (input, meta, type) => {
     if (type==="checkbox" && this.props.card){
       this.props.onChange(this.props.card._id, input.name, input.value ? false: true)
       this.props.updateCard(this.props.card._id, input.name, input.value ? false:true, type, this.props.itemId)
+      this.setState({ loading: false }) 
     }
 
     if (type==="list" && meta.dirty===true && this.props.card){
@@ -119,7 +126,9 @@ class fieldArea extends Component {
           return (
             <div className="z-depth-1-half pt-1 pb-1 mt-2 mb-2"> 
               {this.renderList()}
-             
+              { this.state.loading && 
+                  <span className="spinner-border spinner-border-sm float-right mr-2 mt-4" role="status" aria-hidden="true"></span>
+            }
               <h5 
                 onMouseDown={() => setTimeout( () => this.setState({
                     listItems: [...this.state.listItems, uniqueId('listarea-')],

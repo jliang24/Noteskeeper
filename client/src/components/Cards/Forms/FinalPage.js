@@ -50,7 +50,7 @@ class FinalPage extends Component {
   }; 
 
   onListClicked = () => {
-    this.setState({showList:true, showText:false}); 
+    this.setState({itemClicked: false, showList:true, showText:false}); 
     const newItem = this.props.card.item.concat({
       _id: this.props.form,
       type: "list",
@@ -96,7 +96,10 @@ class FinalPage extends Component {
           <div className="card border-dark mr-3 pb-0 pt-4 p-3 h-100" style={{ width: '280px'}}>
             <button onClick={() => this.props.onDismiss()} style={{position:'absolute',top:'-1px', right:'3px'}} className="close">&times;</button>
             <div className="animated fadeIn" > 
-              <h3 align="center"> {this.props.title} </h3>
+              <h2
+                className="mb-3" 
+                align="center"> {this.props.title} 
+              </h2>
               <form className="form-group shadow-textarea">
                 {this.renderFields()}
               </form>

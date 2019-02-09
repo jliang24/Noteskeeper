@@ -9,6 +9,7 @@
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
+    "react-autosize-textarea": "^6.0.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
     "react-router": "^4.3.1",

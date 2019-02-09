@@ -1,9 +1,10 @@
 import React, { Component } from 'react'; 
 import NewCard from './NewCard'; 
 import { connect } from 'react-redux'; 
-import { fetchCards, deleteCard } from '../../actions'; 
+import { fetchBoard,  fetchCards, deleteCard } from '../../actions'; 
 import FinalPage from './Forms/FinalPage'; 
 import Modal from '../Modal'; 
+import _ from 'lodash'; 
 
 
 class CardList extends Component { 
@@ -14,6 +15,7 @@ class CardList extends Component {
   }; 
 
   renderModal () {
+    window.scrollTo(-500,0); 
     const cardDelete = () => {
       return (
         <>
@@ -24,8 +26,8 @@ class CardList extends Component {
     } 
 
     const onDelete = () => {
-      this.props.deleteCard(this.state.id);
-      this.setState({ showModal: false})
+      this.props.deleteCard(this.state.id, this.props.boardId );
+      this.setState({ showModal: false }); 
     }
 
     return ( 
@@ -47,13 +49,17 @@ class CardList extends Component {
   }
 
   renderCards() {
-    const content = []; 
-    this.props.cards.forEach((card,index) => {
-      content.push(
+    if (_.isEmpty(this.props.cards)){
+      return <NewCard key="createCard"/>
+    }
+
+    const content = this.props.order.map(cardId => {
+      const card = this.props.cards[cardId]; 
+      return (
         <FinalPage 
           title={card.title}
           form={card._id}
-          key={`${card.title}_${index}`}
+          key={`${card._id}`}
           onDismiss= {() => this.onDelete(card._id, card.title)}
         />
       )
@@ -76,10 +82,11 @@ class CardList extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    cards: Object.values(state.cards)
+    order: state.board[ownProps.boardId].cardOrder, 
+    cards: state.cards
   }
 }
 
-export default connect(mapStateToProps, { fetchCards, deleteCard } )(CardList); 
+export default connect(mapStateToProps, { fetchCards, deleteCard, fetchBoard } )(CardList); 

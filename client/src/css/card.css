@@ -7,3 +7,10 @@
   border: 1px solid #ba68c8;
   box-shadow: 0 0 0 0.2rem rgba(186, 104, 200, .25);
 }
+
+h2 {
+  color:#272121d5 ;
+  text-shadow: 
+               -3px 2px 6px rgba(0,0,0,.2),
+               1px 1px 6px rgba(0,0,0,.15);
+}
