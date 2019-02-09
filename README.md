@@ -4,7 +4,7 @@ Summary:
 Allows you to create boards and add notes to them!
 
 Demo:
-![](Notekeeper.gif)
+![](Noteskeeper.gif)
 
 Skills used:
 
