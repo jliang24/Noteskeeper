@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 const Modal = (props) => {
   return ReactDOM.createPortal(
-    <div style={{position:'absolute', top:0, left:'40%'}}>
+    <div style={{position:'absolute', top:'10%', right:0, left:0, marginLeft:'auto', marginRight:'auto'}}>
       <div onClick={() => props.onDismiss()} style={{opacity:0.5, zIndex:2}} className="modal-backdrop"></div>
       <div style={{marginTop:'-60px', zIndex: 3, width:'600px'}}  className="modal-dialog modal-dialog-centered">
       <div className="modal-content">
