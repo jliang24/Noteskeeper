@@ -3,7 +3,7 @@
 Summary:
 Allows you to create boards and add notes to them!
 
-Check it out over here: https://noteskeeper.herokuapp.com/home
+Check it out over here: https://noteskeeper.herokuapp.com/
 
 Demo:
 ![](Noteskeeper.gif)
