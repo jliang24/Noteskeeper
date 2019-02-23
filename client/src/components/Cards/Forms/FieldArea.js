@@ -124,7 +124,7 @@ class fieldArea extends Component {
         </React.Fragment>
       )} else if (this.props.showList || this.props.type==="list") {
           return (
-            <div className="z-depth-1-half pt-1 pb-1 mt-2 mb-2"> 
+            <div className="z-depth-1-half pt-1 pb-1 mt-2 mb-2" style={{backgroundColor: 'white'}}> 
               {this.renderList()}
               { this.state.loading && 
                   <span className="spinner-border spinner-border-sm float-right mr-2 mt-4" role="status" aria-hidden="true"></span>

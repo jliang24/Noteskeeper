@@ -5,6 +5,13 @@ import { fetchBoard,  fetchCards, deleteCard } from '../../actions';
 import FinalPage from './Forms/FinalPage'; 
 import Modal from '../Modal'; 
 import _ from 'lodash'; 
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'; 
+import styled from 'styled-components'; 
+
+const Container = styled.div`
+  padding: 10px; 
+  display: 'flex'; 
+`; 
 
 
 class CardList extends Component { 
@@ -56,16 +63,40 @@ class CardList extends Component {
     const content = this.props.order.map(cardId => {
       const card = this.props.cards[cardId]; 
       return (
-        <FinalPage 
-          title={card.title}
-          form={card._id}
-          key={`${card._id}`}
-          onDismiss= {() => this.onDelete(card._id, card.title)}
-        />
+        <Droppable droppableId={card._id} key={card._id}>
+          {(provided) => ( 
+            <Container
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              <FinalPage 
+                title={card.title}
+                form={card._id}
+                key={`${card._id}`}
+                onDismiss= {() => this.onDelete(card._id, card.title)}
+              />
+              {provided.placeholder}
+             </Container>
+          )}
+        </Droppable>
       )
     })
     content.push(<NewCard key="createCard"/>); 
     return content; 
+  }
+
+  onDragEnd = result => {
+    const { destination, source, draggableId} = result; 
+    const sourceCard = this.props.cards[source.droppableId]; 
+    const destinationCard = this.props.cards[destination.droppableId]; 
+    const start = sourceCard._id; 
+    const finish = destinationCard._id; 
+    if (start === finish) {
+      console.log('start is finish')
+    }
+    // console.log(destination.index)
+    // console.log(source)
+    // console.log(draggableId)
   }
   
   render() {
@@ -74,7 +105,11 @@ class CardList extends Component {
         {this.state.showModal && this.renderModal()}
         <div className="container-fluid">
           <div style={{display:'inline-flex', flexWrap:'nowrap'}}>
-            {this.renderCards()}
+            <DragDropContext
+              onDragEnd= {this.onDragEnd} 
+            >
+              {this.renderCards()}
+            </DragDropContext>
           </div>
         </div>
       </>

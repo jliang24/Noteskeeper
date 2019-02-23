@@ -5,6 +5,16 @@ import AddItem from './AddItem';
 import FieldArea from './FieldArea'; 
 import { addField } from '../../../actions'; 
 import uniqueId from 'uniqid'; 
+import { Draggable } from 'react-beautiful-dnd'; 
+import styled from 'styled-components'; 
+
+const Container = styled.div`
+  border: 1px 1px 1px 0px;
+  padding: 10px 8px 8px 5px; 
+  border-radius: 2px; 
+  display: 'flex'; 
+  flex-direction: 'column'; 
+`; 
 
 class FinalPage extends Component {
   constructor(props) {
@@ -70,21 +80,29 @@ class FinalPage extends Component {
   }
 
   renderFields = () => {
-    return this.props.items.map( (item) => {
+    return this.props.items.map( (item, index) => {
       const name = item.name ? item.name : item.list.itemNames[0] //check for regressions here 
       return (
-        <React.Fragment key={name}>
-          <FieldArea 
-            type = {item.type}
-            form={name}
-            key={name}
-            item = {item.list}
-            card = {this.props.form}
-            onChange = {(form, field, value) => this.props.dispatch(change(form, field, value))}
-            onSave = {this.props.initialize}
-            itemId = {item._id}
-          />
-        </React.Fragment>
+        <Draggable card={this.props.form} draggableId={item._id} index={index} key={name}>
+          {(provided) => (
+            <Container
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              <FieldArea 
+                type = {item.type}
+                form={name}
+                key={name}
+                item = {item.list}
+                card = {this.props.form}
+                onChange = {(form, field, value) => this.props.dispatch(change(form, field, value))}
+                onSave = {this.props.initialize}
+                itemId = {item._id}
+              />
+            </Container>
+          )}
+        </Draggable>
     )
       }
     )
@@ -93,9 +111,11 @@ class FinalPage extends Component {
   render(){ 
     return (
         <React.Fragment>
-          <div className="card border-dark mr-3 pb-0 pt-4 p-3 h-100" style={{ width: '280px'}}>
-            <button onClick={() => this.props.onDismiss()} style={{position:'absolute',top:'-1px', right:'3px'}} className="close">&times;</button>
-            <div className="animated fadeIn" > 
+          <div className="card border-dark mr-3 pb-0 pt-4 p-3" style={{ width: '280px', position:'static'}}>
+            <div style={{position:'relative', zIndex:1}} >
+              <button onClick={() => this.props.onDismiss()} style={{position:'absolute',top:'-15px', right:'-5px', zIndex:'5'}} className="close">&times;</button>
+            </div>
+            <div className="animated fadeIn h-100" > 
               <h2
                 className="mb-3" 
                 align="center"> {this.props.title} 
@@ -103,13 +123,13 @@ class FinalPage extends Component {
               <form className="form-group shadow-textarea">
                 {this.renderFields()}
               </form>
+            </div>
               <AddItem 
                 itemClicked={this.state.itemClicked} 
                 onAddItemClicked={this.onAddItemClicked}
                 onTextClicked={this.onTextClicked}
                 onListClicked={this.onListClicked}
               />
-            </div>
           </div>
         </React.Fragment>
     )
