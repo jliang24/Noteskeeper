@@ -39,6 +39,7 @@ class fieldArea extends Component {
   }
   onListChange = (input, meta, type) => {
     if (type==="checkbox" && this.props.card){
+      console.log(input.name)
       this.props.onChange(this.props.card._id, input.name, input.value ? false: true)
       this.props.updateCard(this.props.card._id, input.name, input.value ? false:true, type, this.props.itemId)
       this.setState({ loading: false }) 

@@ -81,9 +81,9 @@ class FinalPage extends Component {
 
   renderFields = () => {
     return this.props.items.map( (item, index) => {
-      const name = item.name ? item.name : item.list.itemNames[0] //check for regressions here 
+      const name = item.name ? item.name : item.list.itemNames[0] //check for regressions here
       return (
-        <Draggable card={this.props.form} draggableId={item._id} index={index} key={name}>
+        <Draggable card={this.props.form} draggableId={item._id} index={index} key={item._id}>
           {(provided) => (
             <Container
               {...provided.draggableProps}
@@ -93,7 +93,7 @@ class FinalPage extends Component {
               <FieldArea 
                 type = {item.type}
                 form={name}
-                key={name}
+                // key={item._id}
                 item = {item.list}
                 card = {this.props.form}
                 onChange = {(form, field, value) => this.props.dispatch(change(form, field, value))}

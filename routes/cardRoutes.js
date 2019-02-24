@@ -46,6 +46,7 @@ module.exports = (app) => {
   }); 
 
   app.patch('/api/cards/:cardId', requireLogin, async (req, res) => {
+    console.log(req.body)
     const modifyItem = async (key, modified) => {
       const card = await Card.findById(req.body.cardId); 
       const item = await card.item.id(req.body.itemId); 
@@ -122,6 +123,20 @@ module.exports = (app) => {
     }
     res.send(card); 
   }); 
+
+  app.put('/api/cards/:cardId', requireLogin, async (req, res) => {
+    const card = await Card.findOneAndUpdate(
+      {
+        _id: req.params.cardId, 
+      },
+      {
+        $set: {'item': req.body.items}
+      },
+      {new: true}
+    ).exec(); 
+
+    res.send('/'); 
+  })
 
   app.delete('/api/boards/:boardId/cards/:id', requireLogin, async (req,res) => {
     const update = await Boards.findByIdAndUpdate(

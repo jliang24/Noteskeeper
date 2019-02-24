@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; 
 import NewCard from './NewCard'; 
 import { connect } from 'react-redux'; 
-import { fetchBoard,  fetchCards, deleteCard } from '../../actions'; 
+import { fetchBoard,  fetchCards, deleteCard, dragCard } from '../../actions'; 
 import FinalPage from './Forms/FinalPage'; 
 import Modal from '../Modal'; 
 import _ from 'lodash'; 
@@ -86,13 +86,23 @@ class CardList extends Component {
   }
 
   onDragEnd = result => {
-    const { destination, source, draggableId} = result; 
+    const { destination, source } = result; 
+    if (
+      destination.droppableId === source.droppableId && 
+      destination.index === source.index
+      ) {
+      return; 
+    }
     const sourceCard = this.props.cards[source.droppableId]; 
     const destinationCard = this.props.cards[destination.droppableId]; 
     const start = sourceCard._id; 
-    const finish = destinationCard._id; 
+    const finish = destinationCard._id;
+    const newSourceItems = Array.from(sourceCard.item);  
+
     if (start === finish) {
-      console.log('start is finish')
+      newSourceItems.splice(source.index,1); 
+      newSourceItems.splice(destination.index,0,sourceCard.item[source.index]); 
+      this.props.dragCard(start, newSourceItems); 
     }
     // console.log(destination.index)
     // console.log(source)
@@ -106,7 +116,7 @@ class CardList extends Component {
         <div className="container-fluid">
           <div style={{display:'inline-flex', flexWrap:'nowrap'}}>
             <DragDropContext
-              onDragEnd= {this.onDragEnd} 
+              onDragEnd={this.onDragEnd} 
             >
               {this.renderCards()}
             </DragDropContext>
@@ -124,4 +134,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, { fetchCards, deleteCard, fetchBoard } )(CardList); 
+export default connect(mapStateToProps, { fetchCards, deleteCard, fetchBoard, dragCard } )(CardList); 

@@ -6,6 +6,7 @@ import {
   CREATE_CARD,
   CLEAR_CARDS,
   UPDATE_CARD,
+  DRAG_CARD,
   DELETE_CARD,
   ADD_FIELD,
   FETCH_BOARDS,
@@ -55,7 +56,15 @@ export const clearBoard = () => async dispatch => {
 
 export const updateCard = (cardId, name, value, type, itemId="") => async dispatch => { 
   const response = await axios.patch(`/api/cards/${cardId}`, {cardId, name, value, type, itemId}); 
+
   dispatch({type: UPDATE_CARD, payload:response.data }); 
+}
+
+export const dragCard = (cardId, items) => async dispatch => { 
+  const itemContainer = {cardId, items}; 
+  
+  dispatch({type: DRAG_CARD, payload:itemContainer }); 
+  await axios.put(`/api/cards/${cardId}`, {items}); 
 }
 
 export const deleteCard = (id, boardId) => async dispatch => {

@@ -5,6 +5,7 @@ export const FETCH_CARDS = "fetch_cards";
 export const CREATE_CARD = "create_card"; 
 export const CLEAR_CARDS = "clear_cards"; 
 export const UPDATE_CARD = "update_card";
+export const DRAG_CARD = "drag_card";
 export const ADD_FIELD = "add_field"; 
 export const ADD_ITEM = "add_item"; 
 export const DELETE_BOARD = "delete_board";
