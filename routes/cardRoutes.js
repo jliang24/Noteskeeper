@@ -46,7 +46,6 @@ module.exports = (app) => {
   }); 
 
   app.patch('/api/cards/:cardId', requireLogin, async (req, res) => {
-    console.log(req.body)
     const modifyItem = async (key, modified) => {
       const card = await Card.findById(req.body.cardId); 
       const item = await card.item.id(req.body.itemId); 

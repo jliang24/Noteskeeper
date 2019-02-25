@@ -10,6 +10,10 @@ import {createCard, fetchBoard} from '../../../actions/';
 class ThirdPage extends Component {
   state = {itemClicked:false, showText: false, showList: false, failed: false, loading:false}; 
 
+  componentWillUnmount() {
+    this.setState({ itemClicked:false, showText: false, showList: false, failed: false, loading:false })
+  }
+
   onAddItemClicked = () => {
     this.setState({itemClicked:true, showText: true}); 
   }; 

@@ -9,7 +9,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components'; 
 
 const Container = styled.div`
-  min-height: 100px; 
+  min-height: 160px; 
   align-self: baseline; 
   display: inline-block; 
 `; 
@@ -68,7 +68,7 @@ class CardList extends Component {
 
     const content = this.props.order.map((cardId,index) => {
       const card = this.props.cards[cardId]; 
-      const lastItem = card.item.length>0 ? card.item[card.item.length-1] : {text: 'notEmpty'}; 
+      const lastItem = card.item.length>0 ? card.item[card.item.length-1] : {_id:'1', text: 'notEmpty'}; 
       const isDroppable = lastItem.text === "" || !lastItem.hasOwnProperty('_id'); 
       
       return (
@@ -108,7 +108,7 @@ class CardList extends Component {
   }
 
   onDragEnd = result => {
-    const { destination, source, id, type } = result; 
+    const { destination, source, type } = result; 
     if ( !destination ) return; 
     if (
       destination.droppableId === source.droppableId && 
@@ -160,7 +160,6 @@ class CardList extends Component {
                     ref= {provided.innerRef}
                   >
                     {this.renderCards()}
-                {provided.placeholder}
                   </SecondContainer>
                 )}
               </Droppable>

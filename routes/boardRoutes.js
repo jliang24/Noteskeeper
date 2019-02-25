@@ -44,7 +44,6 @@ module.exports = (app) => {
         $set: {'cardOrder': req.body.cardOrder}
       }
     ).exec(); 
-    console.log('this happened')
 
     res.send('/'); 
   })
