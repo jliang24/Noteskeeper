@@ -28,7 +28,6 @@ class CardList extends Component {
   }; 
 
   renderModal () {
-    window.scrollTo(-500,0); 
     const cardDelete = () => {
       return (
         <>
@@ -54,6 +53,7 @@ class CardList extends Component {
   }
 
   onDelete(id, title) {
+    window.scrollTo(-500,0); 
     this.setState({
       title,
       id,
