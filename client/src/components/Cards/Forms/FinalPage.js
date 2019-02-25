@@ -23,7 +23,7 @@ class FinalPage extends Component {
     this.state = {
       itemClicked:false, 
       showText: true, 
-      showList: false
+      showList: false,
     }; 
 
     this.items = {}; 
@@ -46,7 +46,7 @@ class FinalPage extends Component {
   componentDidMount(){
     this.updateItems(); 
   }
-
+  
   componentDidUpdate(prevProps){
     if (prevProps.items.length !== this.props.items.length){
       this.updateItems(); 
@@ -72,7 +72,6 @@ class FinalPage extends Component {
   onListClicked = () => {
     this.setState({itemClicked: false, showList:true, showText:false}); 
     const newItem = this.props.card.item.concat({
-      // _id: this.props.form,
       type: "list",
       list: {
         itemNames: [uniqueId('listarea-')],
@@ -128,7 +127,7 @@ class FinalPage extends Component {
   render(){ 
     return (
         <React.Fragment>
-          <div className="card pb-0 pt-4 p-3 h-100" style={{ width: '280px', position:'static'}}>
+          <div className='card pb-0 pt-4 p-3 h-100' style={{ width: '280px', position:'static'}}>
             <div style={{position:'relative', zIndex:1}} >
               <button onClick={() => this.props.onDismiss()} style={{position:'absolute',top:'-15px', right:'-5px', zIndex:'5'}} className="close">&times;</button>
             </div>

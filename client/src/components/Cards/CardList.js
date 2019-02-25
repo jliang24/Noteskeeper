@@ -21,11 +21,20 @@ const SecondContainer = styled.div`
 
 
 class CardList extends Component { 
-  state={ showModal : false, title: "", id: "" }; 
+  state={ showModal : false, title: "", id: "", animated: true }; 
 
   componentDidMount() {
     this.props.fetchCards(this.props.boardId); 
   }; 
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.order !== this.props.order){
+      this.setState({ animated: false })
+      if (this.props.order.length > prevProps.order.length) {
+        return this.setState({ animated: true })
+      }
+    }
+  }
 
   renderModal () {
     const cardDelete = () => {
@@ -86,7 +95,7 @@ class CardList extends Component {
                 <Container
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className='border border-dark mr-3'
+                  className={`border border-dark mr-3 ${this.props.order.length-1 === index && this.state.animated && 'animated flipInX'}`}
                 >
                   <FinalPage 
                     title={card.title}
