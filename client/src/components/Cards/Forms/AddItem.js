@@ -18,9 +18,9 @@ const addItem = (props) => {
               style={{fontSize: '12px'}}
               className="col btn btn-outline-success btn-sm" type="button">Text</button>
             <button 
-            onClick={() => props.onListClicked()}
-            style={{fontSize: '12px'}}
-            className="col btn btn-sm btn-outline-secondary" type="button">List</button>
+              onClick={() => props.onListClicked()}
+              style={{fontSize: '12px'}}
+              className="col btn btn-sm btn-outline-secondary" type="button">List</button>
           </div>
         </div>
       </form>

@@ -7,7 +7,7 @@ import uniqueId from 'uniqid';
 import TextareaAutosize from 'react-autosize-textarea'; 
 
 class fieldArea extends Component {
-  state = {listItems: [uniqueId('listarea-')], checkedItems:[uniqueId('checkarea-')], loading:false}; 
+  state = {showError: false, listItems: [uniqueId('listarea-')], checkedItems:[uniqueId('checkarea-')], loading:false}; 
 
   componentDidMount(){
     if (this.props.item){
@@ -39,13 +39,20 @@ class fieldArea extends Component {
   }
   onListChange = (input, meta, type) => {
     if (type==="checkbox" && this.props.card){
-      console.log(input.name)
+      if (!this.props.field.values[this.state.listItems[this.state.listItems.length-1]]) {
+        this.props.onChange(this.props.card._id, input.name, input.value ? true: false)
+        return this.setState({ loading: false, showError: true })
+      }
+      
       this.props.onChange(this.props.card._id, input.name, input.value ? false: true)
       this.props.updateCard(this.props.card._id, input.name, input.value ? false:true, type, this.props.itemId)
       this.setState({ loading: false }) 
     }
 
     if (type==="list" && meta.dirty===true && this.props.card){
+      if (this.state.showError) {
+        this.setState({ showError: false })
+      }
       this.props.updateCard(this.props.card._id, input.name, input.value, type, this.props.itemId)
       const checkedField = this.state.checkedItems[this.state.listItems.indexOf(input.name)]; 
       if (!this.props.field.values[checkedField]) {
@@ -79,9 +86,10 @@ class fieldArea extends Component {
 
   renderList = () => {
     return this.state.listItems.map( (name,index) => {
+      const checkedItem = this.state.checkedItems[index] 
       return (
         <React.Fragment key={name}>
-          {this.groupListComponent(name, this.state.checkedItems[index])}
+          {this.groupListComponent(name, checkedItem)}
         </React.Fragment>
       )
     })
@@ -129,12 +137,13 @@ class fieldArea extends Component {
               {this.renderList()}
               { this.state.loading && 
                   <span className="spinner-border spinner-border-sm float-right mr-2 mt-4" role="status" aria-hidden="true"></span>
-            }
+              }
+              {this.state.showError && <p className='ml-5 text-danger'>Please enter a value first!</p>}
               <h5 
-                onMouseDown={() => setTimeout( () => this.setState({
+                onMouseDown={() => this.setState({
                     listItems: [...this.state.listItems, uniqueId('listarea-')],
                     checkedItems: [...this.state.checkedItems, uniqueId('checkarea-')]
-                }),100)}
+                })}
                 className="ml-2 mt-3 createcard text-primary">+ Add List Item
               </h5>
             </div>

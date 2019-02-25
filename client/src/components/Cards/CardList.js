@@ -11,6 +11,8 @@ import styled from 'styled-components';
 const Container = styled.div`
   padding: 10px; 
   display: 'flex'; 
+  min-height: 100px; 
+  background-color: pink; 
 `; 
 
 
@@ -62,8 +64,15 @@ class CardList extends Component {
 
     const content = this.props.order.map(cardId => {
       const card = this.props.cards[cardId]; 
+      const lastItem = card.item.length>0 ? card.item[card.item.length-1] : {text: 'notEmpty'}; 
+      const isDroppable = lastItem.text === "" || !lastItem.hasOwnProperty('_id'); 
+      
       return (
-        <Droppable droppableId={card._id} key={card._id}>
+        <Droppable 
+          droppableId={card._id} 
+          key={card._id}
+          isDropDisabled = {isDroppable}
+        >
           {(provided) => ( 
             <Container
               ref={provided.innerRef}
@@ -87,6 +96,7 @@ class CardList extends Component {
 
   onDragEnd = result => {
     const { destination, source } = result; 
+    if ( !destination ) return; 
     if (
       destination.droppableId === source.droppableId && 
       destination.index === source.index
@@ -98,15 +108,15 @@ class CardList extends Component {
     const start = sourceCard._id; 
     const finish = destinationCard._id;
     const newSourceItems = Array.from(sourceCard.item);  
-
+    newSourceItems.splice(source.index,1); 
     if (start === finish) {
-      newSourceItems.splice(source.index,1); 
       newSourceItems.splice(destination.index,0,sourceCard.item[source.index]); 
-      this.props.dragCard(start, newSourceItems); 
+      return this.props.dragCard(start, newSourceItems); 
     }
-    // console.log(destination.index)
-    // console.log(source)
-    // console.log(draggableId)
+    const newDestinationItems = Array.from(destinationCard.item); 
+    newDestinationItems.splice(destination.index, 0, sourceCard.item[source.index]);
+    this.props.dragCard(finish, newDestinationItems); 
+    this.props.dragCard(start, newSourceItems); 
   }
   
   render() {

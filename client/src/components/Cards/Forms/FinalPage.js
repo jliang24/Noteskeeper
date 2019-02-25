@@ -29,7 +29,7 @@ class FinalPage extends Component {
     this.items = {}; 
   }
 
-  componentDidMount(){
+  updateItems() {
     if (!this.props.items) return 
     this.props.items.forEach(({type, name, text, list}) => {
       if (type==='list'){
@@ -41,6 +41,16 @@ class FinalPage extends Component {
       }
     })
     this.props.initialize(this.items) 
+  }
+
+  componentDidMount(){
+    this.updateItems(); 
+  }
+
+  componentDidUpdate(prevProps){
+    if (prevProps.items.length !== this.props.items.length){
+      this.updateItems(); 
+    }
   }
 
   onAddItemClicked = () => {
@@ -62,7 +72,7 @@ class FinalPage extends Component {
   onListClicked = () => {
     this.setState({itemClicked: false, showList:true, showText:false}); 
     const newItem = this.props.card.item.concat({
-      _id: this.props.form,
+      // _id: this.props.form,
       type: "list",
       list: {
         itemNames: [uniqueId('listarea-')],
@@ -82,8 +92,14 @@ class FinalPage extends Component {
   renderFields = () => {
     return this.props.items.map( (item, index) => {
       const name = item.name ? item.name : item.list.itemNames[0] //check for regressions here
+      const isDragDisabled = !item.hasOwnProperty('_id') || item.text === ""
       return (
-        <Draggable card={this.props.form} draggableId={item._id} index={index} key={item._id}>
+        <Draggable 
+          draggableId={name} 
+          index={index} 
+          key={name}
+          isDragDisabled= {isDragDisabled}
+        >
           {(provided) => (
             <Container
               {...provided.draggableProps}

@@ -125,7 +125,7 @@ module.exports = (app) => {
   }); 
 
   app.put('/api/cards/:cardId', requireLogin, async (req, res) => {
-    const card = await Card.findOneAndUpdate(
+    await Card.findOneAndUpdate(
       {
         _id: req.params.cardId, 
       },
