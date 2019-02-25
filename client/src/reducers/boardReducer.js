@@ -1,4 +1,9 @@
-import { FETCH_BOARD, FETCH_BOARDS, DELETE_BOARD, DELETE_CARD } from '../actions/types';
+import { 
+  FETCH_BOARD, 
+  FETCH_BOARDS, 
+  DELETE_BOARD, 
+  DELETE_CARD,
+  CHANGE_ORDER } from '../actions/types';
 import _ from 'lodash';  
 
 const boardReducer =  (state={}, action) => {
@@ -12,6 +17,8 @@ const boardReducer =  (state={}, action) => {
     case DELETE_CARD:
        _.pull(state[action.payload.boardId].cardOrder, action.payload.id); 
       return state; 
+    case CHANGE_ORDER: 
+      return {...state, [action.payload.boardId]:{...state[action.payload.boardId], cardOrder:action.payload.cardOrder}}
     default: 
       return state; 
   }

@@ -1,18 +1,22 @@
 import React, { Component } from 'react'; 
 import NewCard from './NewCard'; 
 import { connect } from 'react-redux'; 
-import { fetchBoard,  fetchCards, deleteCard, dragCard } from '../../actions'; 
+import { fetchBoard,  fetchCards, deleteCard, dragCard, changeOrder } from '../../actions'; 
 import FinalPage from './Forms/FinalPage'; 
 import Modal from '../Modal'; 
 import _ from 'lodash'; 
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'; 
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'; 
 import styled from 'styled-components'; 
 
 const Container = styled.div`
-  padding: 10px; 
-  display: 'flex'; 
   min-height: 100px; 
-  background-color: pink; 
+  align-self: baseline; 
+  display: inline-block; 
+`; 
+
+const SecondContainer = styled.div`
+  display: inline-flex;  
+  align-self: baseline; 
 `; 
 
 
@@ -62,32 +66,41 @@ class CardList extends Component {
       return <NewCard key="createCard"/>
     }
 
-    const content = this.props.order.map(cardId => {
+    const content = this.props.order.map((cardId,index) => {
       const card = this.props.cards[cardId]; 
       const lastItem = card.item.length>0 ? card.item[card.item.length-1] : {text: 'notEmpty'}; 
       const isDroppable = lastItem.text === "" || !lastItem.hasOwnProperty('_id'); 
       
       return (
-        <Droppable 
-          droppableId={card._id} 
-          key={card._id}
-          isDropDisabled = {isDroppable}
-        >
-          {(provided) => ( 
-            <Container
-              ref={provided.innerRef}
-              {...provided.droppableProps}
+        <Draggable
+          draggableId={card._id} index={index} key={`${card._id} drag`}>
+          {provided => (
+          <SecondContainer 
+            {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+            <Droppable 
+              droppableId={card._id} 
+              key={card._id}
+              isDropDisabled = {isDroppable}
             >
-              <FinalPage 
-                title={card.title}
-                form={card._id}
-                key={`${card._id}`}
-                onDismiss= {() => this.onDelete(card._id, card.title)}
-              />
-              {provided.placeholder}
-             </Container>
+              {(provided) => ( 
+                <Container
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className='border border-dark mr-3'
+                >
+                  <FinalPage 
+                    title={card.title}
+                    form={card._id}
+                    key={`${card._id} final`}
+                    onDismiss= {() => this.onDelete(card._id, card.title)}
+                  />
+                  {provided.placeholder}
+                 </Container>
+              )}
+            </Droppable>
+          </SecondContainer>
           )}
-        </Droppable>
+        </Draggable>
       )
     })
     content.push(<NewCard key="createCard"/>); 
@@ -95,7 +108,7 @@ class CardList extends Component {
   }
 
   onDragEnd = result => {
-    const { destination, source } = result; 
+    const { destination, source, id, type } = result; 
     if ( !destination ) return; 
     if (
       destination.droppableId === source.droppableId && 
@@ -103,6 +116,14 @@ class CardList extends Component {
       ) {
       return; 
     }
+    if (type === 'column') {
+      const newOrder = Array.from(this.props.order); 
+      newOrder.splice(source.index, 1); 
+      newOrder.splice(destination.index,0, this.props.order[source.index])
+      return this.props.changeOrder(this.props.boardId, newOrder); 
+      
+    } 
+
     const sourceCard = this.props.cards[source.droppableId]; 
     const destinationCard = this.props.cards[destination.droppableId]; 
     const start = sourceCard._id; 
@@ -124,11 +145,25 @@ class CardList extends Component {
       <>
         {this.state.showModal && this.renderModal()}
         <div className="container-fluid">
-          <div style={{display:'inline-flex', flexWrap:'nowrap'}}>
+          <div style={{ display:'inline-flex', flexWrap:'nowrap'}}>
             <DragDropContext
               onDragEnd={this.onDragEnd} 
             >
-              {this.renderCards()}
+              <Droppable
+                droppableId="all-columns"
+                direction="horizontal"
+                type="column"
+                key="all-column">
+                {provided => (
+                  <SecondContainer 
+                    {...provided.droppableProps}
+                    ref= {provided.innerRef}
+                  >
+                    {this.renderCards()}
+                {provided.placeholder}
+                  </SecondContainer>
+                )}
+              </Droppable>
             </DragDropContext>
           </div>
         </div>
@@ -144,4 +179,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, { fetchCards, deleteCard, fetchBoard, dragCard } )(CardList); 
+export default connect(mapStateToProps, { fetchCards, deleteCard, fetchBoard, dragCard, changeOrder } )(CardList); 

@@ -10,3 +10,4 @@ export const ADD_FIELD = "add_field";
 export const ADD_ITEM = "add_item"; 
 export const DELETE_BOARD = "delete_board";
 export const DELETE_CARD = "delete_card";  
+export const CHANGE_ORDER = "change_order"

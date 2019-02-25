@@ -131,8 +131,7 @@ module.exports = (app) => {
       },
       {
         $set: {'item': req.body.items}
-      },
-      {new: true}
+      }
     ).exec(); 
 
     res.send('/'); 

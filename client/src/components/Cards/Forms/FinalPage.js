@@ -92,7 +92,8 @@ class FinalPage extends Component {
   renderFields = () => {
     return this.props.items.map( (item, index) => {
       const name = item.name ? item.name : item.list.itemNames[0] //check for regressions here
-      const isDragDisabled = !item.hasOwnProperty('_id') || item.text === ""
+      const lastItem = this.props.items[this.props.items.length-1]
+      const isDragDisabled = !lastItem.hasOwnProperty('_id') || lastItem.text === ""; 
       return (
         <Draggable 
           draggableId={name} 
@@ -127,11 +128,11 @@ class FinalPage extends Component {
   render(){ 
     return (
         <React.Fragment>
-          <div className="card border-dark mr-3 pb-0 pt-4 p-3" style={{ width: '280px', position:'static'}}>
+          <div className="card pb-0 pt-4 p-3 h-100" style={{ width: '280px', position:'static'}}>
             <div style={{position:'relative', zIndex:1}} >
               <button onClick={() => this.props.onDismiss()} style={{position:'absolute',top:'-15px', right:'-5px', zIndex:'5'}} className="close">&times;</button>
             </div>
-            <div className="animated fadeIn h-100" > 
+            <div className="h-100" > 
               <h2
                 className="mb-3" 
                 align="center"> {this.props.title} 

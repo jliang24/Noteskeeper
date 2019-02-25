@@ -2,6 +2,7 @@ import {
   FETCH_USER, 
   FETCH_BOARD,
   DELETE_BOARD,
+  CHANGE_ORDER, 
   FETCH_CARDS,
   CREATE_CARD,
   CLEAR_CARDS,
@@ -65,6 +66,13 @@ export const dragCard = (cardId, items) => async dispatch => {
   
   dispatch({type: DRAG_CARD, payload:itemContainer }); 
   await axios.put(`/api/cards/${cardId}`, {items}); 
+}
+
+export const changeOrder = (boardId, cardOrder) => async dispatch => { 
+  const itemContainer = {boardId, cardOrder}; 
+  
+  dispatch({type: CHANGE_ORDER, payload:itemContainer }); 
+  await axios.patch(`/api/boards/${boardId}`, {cardOrder}); 
 }
 
 export const deleteCard = (id, boardId) => async dispatch => {

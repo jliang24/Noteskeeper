@@ -34,4 +34,18 @@ module.exports = (app) => {
     await Boards.find({_id: req.params.id}).deleteOne().exec(); 
     res.send('/'); 
   })
+
+  app.patch('/api/boards/:boardId', requireLogin, async (req, res) => {
+    await Boards.findOneAndUpdate(
+      {
+        _id: req.params.boardId, 
+      },
+      {
+        $set: {'cardOrder': req.body.cardOrder}
+      }
+    ).exec(); 
+    console.log('this happened')
+
+    res.send('/'); 
+  })
 }
