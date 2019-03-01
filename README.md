@@ -1,7 +1,7 @@
 # Noteskeeper
 
 Summary:
-Allows you to create boards and add notes to them!
+This is a Trello clone that allows you to create boards and add notes to them! In addition, you can drag fields and reorder cards. 
 
 Check it out over here: https://noteskeeper.herokuapp.com/
 
