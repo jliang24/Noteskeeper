@@ -1,30 +1,47 @@
-import React from 'react'; 
+import React from 'react';
 
-const saveButton = ({showText, showList, onDismiss, onSave=null, creation}) => {
+const saveButton = ({
+  showText,
+  showList,
+  onDismiss,
+  onSave = null,
+  creation
+}) => {
   const renderSaveButton = () => {
-    if (onSave){
+    if (onSave) {
       return (
-        <button type="button" onClick={onSave} className="btn btn-success float-right btn-sm mb-1">Save</button>
-      )
+        <button
+          type="button"
+          onClick={onSave}
+          className="btn btn-success float-right btn-sm mb-1"
+        >
+          Save
+        </button>
+      );
     }
     return (
-      <button type="submit" className="btn btn-success float-right btn-sm mb-0">SAVE</button>
-    )
-  }
+      <button type="submit" className="btn btn-success float-right btn-sm mb-0">
+        SAVE
+      </button>
+    );
+  };
   if (showText || showList) {
-    return(
-      <div style={{height: '35px'}}>
+    return (
+      <div style={{ height: '35px' }}>
         {renderSaveButton()}
-        {creation ||
-        <button 
-          onClick={()=> onDismiss()} 
-          className="btn btn-danger float-left btn-sm mb-1" type="button"> 
-          Cancel
-        </button>}
+        {creation || (
+          <button
+            onClick={() => onDismiss()}
+            className="btn btn-danger float-left btn-sm mb-1"
+            type="button"
+          >
+            Cancel
+          </button>
+        )}
       </div>
-    )
+    );
   }
-  return null 
-}
+  return null;
+};
 
-export default saveButton; 
+export default saveButton;
