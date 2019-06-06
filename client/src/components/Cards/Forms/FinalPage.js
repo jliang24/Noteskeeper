@@ -111,7 +111,6 @@ class FinalPage extends Component {
               <FieldArea
                 type={item.type}
                 form={name}
-                // key={item._id}
                 item={item.list}
                 card={this.props.form}
                 onChange={(form, field, value) =>
@@ -131,7 +130,8 @@ class FinalPage extends Component {
     return (
       <React.Fragment>
         <div
-          className="card pb-0 pt-4 p-3 h-100"
+          id="card"
+          className="pb-0 pt-4 p-3 h-100"
           style={{ width: '280px', position: 'static' }}
         >
           <div style={{ position: 'relative', zIndex: 1 }}>

@@ -18,6 +18,7 @@ const Container = styled.div`
   min-height: 160px;
   align-self: baseline;
   display: inline-block;
+  background-color: white;
 `;
 
 const SecondContainer = styled.div`
@@ -94,6 +95,7 @@ class CardList extends Component {
           draggableId={card._id}
           index={index}
           key={`${card._id} drag`}
+          className="dragdrop"
         >
           {provided => (
             <SecondContainer
@@ -110,8 +112,8 @@ class CardList extends Component {
                   <Container
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className={`border border-dark mr-3 ${this.props.order
-                      .length -
+                    className={`border border-light shadow mr-3 ${this.props
+                      .order.length -
                       1 ===
                       index &&
                       this.state.animated &&
@@ -181,25 +183,23 @@ class CardList extends Component {
       <>
         {this.state.showModal && this.renderModal()}
         <div className="container-fluid">
-          <div style={{ display: 'inline-flex', flexWrap: 'nowrap' }}>
-            <DragDropContext onDragEnd={this.onDragEnd}>
-              <Droppable
-                droppableId="all-columns"
-                direction="horizontal"
-                type="column"
-                key="all-column"
-              >
-                {provided => (
-                  <SecondContainer
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {this.renderCards()}
-                  </SecondContainer>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Droppable
+              droppableId="all-columns"
+              direction="horizontal"
+              type="column"
+              key="all-column"
+            >
+              {provided => (
+                <SecondContainer
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {this.renderCards()}
+                </SecondContainer>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </>
     );
